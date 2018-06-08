@@ -13,6 +13,7 @@ namespace Whathecode.System.Arithmetic.Range
 	/// <author>Steven Jeuris</author>
 	public class IntervalEnumerator<TMath, TSize> : AbstractEnumerator<TMath>
 		where TMath : IComparable<TMath>
+		where TSize : IComparable<TSize>
 	{
 		readonly Interval<TMath, TSize> _interval;
 		readonly TSize _step;
@@ -80,6 +81,11 @@ namespace Whathecode.System.Arithmetic.Range
 
 		protected override bool HasMoreElements( int enumeratedAlready, TMath previous )
 		{
+			if ( Interval<TMath, TSize>.ConvertSizeToDouble( _step ) == 0 && enumeratedAlready == 1 )
+			{
+				return false;
+			}
+
 			return _interval.LiesInInterval( Operator<TMath, TSize>.AddSize( previous, _step ) );
 		}
 
